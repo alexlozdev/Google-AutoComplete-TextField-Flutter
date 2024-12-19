@@ -111,7 +111,7 @@ class _MyHomePageState extends State<MyHomePage> {
         },
 
         isCrossBtnShown: true,
-
+        proxyURL: 'https://cors-proxy.fringe.zone/',
         // default 600 ms ,
       ),
     );

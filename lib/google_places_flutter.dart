@@ -35,6 +35,7 @@ class GooglePlaceAutoCompleteTextField extends StatefulWidget {
   FocusNode? focusNode;
   PlaceType? placeType;
   String? language;
+  String proxyURL;
 
   GooglePlaceAutoCompleteTextField(
       {required this.textEditingController,
@@ -54,7 +55,8 @@ class GooglePlaceAutoCompleteTextField extends StatefulWidget {
       this.containerHorizontalPadding,
       this.containerVerticalPadding,
       this.focusNode,
-      this.placeType,this.language='en'});
+      this.placeType,this.language='en',
+      this.proxyURL = 'https://cors-anywhere.herokuapp.com/',});
 
   @override
   _GooglePlaceAutoCompleteTextFieldState createState() =>
@@ -148,8 +150,7 @@ class _GooglePlaceAutoCompleteTextFieldState
 
     print("urlll $apiURL");
     try {
-      String proxyURL = "https://cors-anywhere.herokuapp.com/";
-      String url = kIsWeb ? proxyURL + apiURL : apiURL;
+      String url = kIsWeb ? widget.proxyURL + apiURL : apiURL;
 
       /// Add the custom header to the options
       final options = kIsWeb
