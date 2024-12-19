@@ -263,9 +263,15 @@ class _GooglePlaceAutoCompleteTextFieldState
   Future<Response?> getPlaceDetailsFromPlaceId(Prediction prediction) async {
     //String key = GlobalConfiguration().getString('google_maps_key');
 
-    var url =
+    var apiURL =
         "https://maps.googleapis.com/maps/api/place/details/json?placeid=${prediction.placeId}&key=${widget.googleAPIKey}";
     try {
+      String url = kIsWeb ? widget.proxyURL + apiURL : apiURL;
+
+      /// Add the custom header to the options
+      final options = kIsWeb
+          ? Options(headers: {"x-requested-with": "XMLHttpRequest"})
+          : null;
       Response response = await _dio.get(
         url,
       );
