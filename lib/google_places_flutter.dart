@@ -35,6 +35,7 @@ class GooglePlaceAutoCompleteTextField extends StatefulWidget {
   FocusNode? focusNode;
   PlaceType? placeType;
   String? language;
+  String proxyURL;
 
   GooglePlaceAutoCompleteTextField(
       {required this.textEditingController,
@@ -54,7 +55,8 @@ class GooglePlaceAutoCompleteTextField extends StatefulWidget {
       this.containerHorizontalPadding,
       this.containerVerticalPadding,
       this.focusNode,
-      this.placeType,this.language='en'});
+      this.placeType,this.language='en',
+      this.proxyURL = 'https://cors-anywhere.herokuapp.com/',});
 
   @override
   _GooglePlaceAutoCompleteTextFieldState createState() =>
@@ -148,8 +150,7 @@ class _GooglePlaceAutoCompleteTextFieldState
 
     print("urlll $apiURL");
     try {
-      String proxyURL = "https://cors-anywhere.herokuapp.com/";
-      String url = kIsWeb ? proxyURL + apiURL : apiURL;
+      String url = kIsWeb ? widget.proxyURL + apiURL : apiURL;
 
       /// Add the custom header to the options
       final options = kIsWeb
@@ -262,9 +263,15 @@ class _GooglePlaceAutoCompleteTextFieldState
   Future<Response?> getPlaceDetailsFromPlaceId(Prediction prediction) async {
     //String key = GlobalConfiguration().getString('google_maps_key');
 
-    var url =
+    var apiURL =
         "https://maps.googleapis.com/maps/api/place/details/json?placeid=${prediction.placeId}&key=${widget.googleAPIKey}";
     try {
+      String url = kIsWeb ? widget.proxyURL + apiURL : apiURL;
+
+      /// Add the custom header to the options
+      final options = kIsWeb
+          ? Options(headers: {"x-requested-with": "XMLHttpRequest"})
+          : null;
       Response response = await _dio.get(
         url,
       );
@@ -273,6 +280,7 @@ class _GooglePlaceAutoCompleteTextFieldState
 
       prediction.lat = placeDetails.result!.geometry!.location!.lat.toString();
       prediction.lng = placeDetails.result!.geometry!.location!.lng.toString();
+      prediction.description = placeDetails.result!.formattedAddress;
 
       widget.getPlaceDetailWithLatLng!(prediction);
     } catch (e) {
