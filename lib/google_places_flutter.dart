@@ -59,11 +59,11 @@ class GooglePlaceAutoCompleteTextField extends StatefulWidget {
       this.proxyURL = 'https://cors-anywhere.herokuapp.com/',});
 
   @override
-  _GooglePlaceAutoCompleteTextFieldState createState() =>
-      _GooglePlaceAutoCompleteTextFieldState();
+  GooglePlaceAutoCompleteTextFieldState createState() =>
+      GooglePlaceAutoCompleteTextFieldState();
 }
 
-class _GooglePlaceAutoCompleteTextFieldState
+class GooglePlaceAutoCompleteTextFieldState
     extends State<GooglePlaceAutoCompleteTextField> {
   final subject = new PublishSubject<String>();
   OverlayEntry? _overlayEntry;
@@ -103,11 +103,7 @@ class _GooglePlaceAutoCompleteTextFieldState
                 controller: widget.textEditingController,
                 focusNode: widget.focusNode ?? FocusNode(),
                 onChanged: (string) {
-                  subject.add(string);
-                  if (widget.isCrossBtnShown) {
-                    isCrossBtn = string.isNotEmpty ? true : false;
-                    setState(() {});
-                  }
+                  addSubject(string);
                 },
               ),
             ),
@@ -120,6 +116,14 @@ class _GooglePlaceAutoCompleteTextFieldState
         ),
       ),
     );
+  }
+
+  void addSubject(String word) {
+    subject.add(word);
+    if (widget.isCrossBtnShown) {
+      isCrossBtn = word.isNotEmpty ? true : false;
+      setState(() {});
+    }
   }
 
   getLocation(String text) async {
