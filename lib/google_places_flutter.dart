@@ -37,14 +37,15 @@ class GooglePlaceAutoCompleteTextField extends StatefulWidget {
   String? language;
   String proxyURL;
 
-  GooglePlaceAutoCompleteTextField(
-      {required this.textEditingController,
+  GooglePlaceAutoCompleteTextField({
+      super.key,
+      required this.textEditingController,
       required this.googleAPIKey,
-      this.debounceTime: 600,
-      this.inputDecoration: const InputDecoration(),
+      this.debounceTime = 600,
+      this.inputDecoration = const InputDecoration(),
       this.itemClick,
       this.isLatLngRequired = true,
-      this.textStyle: const TextStyle(),
+      this.textStyle = const TextStyle(),
       this.countries,
       this.getPlaceDetailWithLatLng,
       this.itemBuilder,
@@ -55,7 +56,8 @@ class GooglePlaceAutoCompleteTextField extends StatefulWidget {
       this.containerHorizontalPadding,
       this.containerVerticalPadding,
       this.focusNode,
-      this.placeType,this.language='en',
+      this.placeType,
+      this.language='en',
       this.proxyURL = 'https://cors-anywhere.herokuapp.com/',});
 
   @override
